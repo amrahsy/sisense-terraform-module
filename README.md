@@ -1,2 +1,1 @@
-# sisense-terraform-module
-Terraform module for installing Sisense
+# Terraform module for installing Sisense
