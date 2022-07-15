@@ -1,0 +1,121 @@
+# Default values for Sisense provisioner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#######################################
+## Sisense Product values
+#######################################
+
+## Kubernetes Nodes labeling - Choose Label all nodes or Label defined nodes
+labeling:
+  ## Label all nodes
+  labelAllNodes: false
+
+  ## Label defined nodes - when autoLabeling is false
+  kubernetesNodes:
+    - { node: node1, roles: "application, query" }
+    - { node: node2, roles: "application, query" }
+    - { node: node3, roles: "build" }
+
+## Deployment size is used to determine the maximum pod limits allocated for application
+## Possible values: small/large
+deploymentSize: "small"
+
+## Sisense will use Kubernetes ClusterRole in order to manage the tenant
+clusterVisibility: true
+
+## Enable delta approach for shared dashboards/widgets
+enable_widget_deltas: false
+
+# Load sisense service in active/active redundancy
+highAvailability: true
+
+## Ansible verbose and pod execute ability
+debug:
+  sleepMode: false
+  verbose:
+    enabled: false
+    level: 1
+
+# Docker registry
+dockerRegistry: quay.io/sisense
+
+## In case of offlline-instllation (Private public docker registrry is required)
+## When secured: Configure docker registry pull secret
+pullSecretsName: ""
+
+## Application DNS Name.
+#1. When empty, first node name will be configured
+#2. When using SSL and setting tlsSecretName, configure the CN name
+#3. Add http:// or https:// as a prefix when using external Load Balancer for Commom name
+applicationDnsName: ""
+
+## Cloud features: LoadBallancer service, Cluster auto-scaler app.
+cloud:
+  ## LoadBallancer service for Sisense app
+  loadBalancer: false
+  loadBalancer_internal: false
+
+  ## Cloud AutoScaler service (in GCP and Azure already built-in, set it to 'true') - true/false
+  autoScaler: false
+
+## Persistence Storage for Sisense HA, When false, it will use hostPath "/opt/sisense/storage"
+persistence:
+  enabled: false
+  ## storageType: fsx, nfs (client), nfs-server
+  # fsx - Will install fsx-csi driver
+  # nfs - Will install nfs client
+  # nfs-server - Will install nfs-server
+  # efs - Will install efs client
+  # On prem - glusterfs, rook-ceph
+  storageType: ""
+
+  ## PVC Sizes
+  sisenseDiskSize: 70
+  mongodbDiskSize: 20
+  zookeeperDiskSize: 2
+
+  ## AWS FSx
+  fsxDnsName: ""
+  fsxMountName: ""
+
+  ## NFS Client
+  nfsServer: ""
+  nfsPath: ""
+
+  ## AWS EFS
+  efsFileSystemId: ""
+  efsAwsRegion: ""
+
+  ## Manual ReadWriteMany, ReadWriteOnce StorageClass definition
+  ## ReadWriteMany StorageClass name (e.g: gluster, trident, nfs, nfs-client, cephfs)
+  rwxScName: ""
+
+  ## ReadWriteOnce StorageClass name (e.g: gp2, default, standard)
+  rwoScName: ""
+
+## Terminate SSL for Sisense service
+tlsSecretName: ""
+
+## Exposing NodePorts for MongoDB. RabbitMQ, Zookeeper, Query service, Management Service, Translation service and Build service.
+exposeNodePorts: false
+
+## NodePort of api-gateway service - endpoint of Sisense in Non-Secured mode.
+gatewayPort: 30845
+
+## Sisense Application Time Zone
+timeZone: "UTC"
+
+monitoring:
+  ## Grafana and Prometheus - true/false
+  internal: false
+
+  ## Fluentd With Logz.io Dashboards - true/false
+  external: false
+
+## Uninstall
+uninstall:
+  namespacedResources: false
+  clusterResources: false
+  removeUserData: false
+
